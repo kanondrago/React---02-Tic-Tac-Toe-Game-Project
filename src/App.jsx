@@ -2,6 +2,7 @@
 import { useState } from "react"
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard"
+import Logs from './components/Logs'
 
 function App() {  
 
@@ -24,7 +25,7 @@ function App() {
         <GameBoard onSelectSquare={handleSelectSquare} activePlayer={activePlayer}></GameBoard>
       </div>
 
-      LOGS
+      <Logs></Logs>
     </main>
   )
 }
