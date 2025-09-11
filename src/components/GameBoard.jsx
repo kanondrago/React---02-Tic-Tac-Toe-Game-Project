@@ -6,22 +6,15 @@ const initialGameBoard = [
     [null, null, null], 
 ]
 
-export default function GameBoard({onSelectSquare, activePlayer}) {
+export default function GameBoard({onSelectSquare, turns}) {
 
-    // Carefull to change the state of an object or an Array that are tecnically Objects in JS.
-    const [gameBoard, setGameBoard] = useState(initialGameBoard);
+    // Making a derived state =====> Computed
+    let gameBoard = initialGameBoard;
 
-    function handleSelectSquare(rowIndex, colIndex, symbol) {
-
-        setGameBoard((prevGameBoard) => {
-            // Approach and pattern
-            // Using this, we are updating the state in an immutable way => ... Is strongly recommended...
-            const updatedBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-            updatedBoard[rowIndex][colIndex] = symbol
-            return updatedBoard;
-        })
-
-        onSelectSquare();
+    for (const turn of turns) {
+        const {square, player} = turn;
+        const {row, col} = square;
+        gameBoard[row][col] = player;
     }
 
 
@@ -30,7 +23,7 @@ export default function GameBoard({onSelectSquare, activePlayer}) {
             {gameBoard.map((row, rowIndex) => <li key={rowIndex}>
                 <ol>
                     {row.map((playerSymbol, colIndex) => <li key={colIndex}>
-                        <button onClick={() => handleSelectSquare(rowIndex, colIndex, activePlayer)}>
+                        <button onClick={() => onSelectSquare(rowIndex, colIndex)}>
                             {playerSymbol}
                         </button>
                     </li>)}
