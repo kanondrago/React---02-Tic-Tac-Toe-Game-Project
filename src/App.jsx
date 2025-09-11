@@ -8,10 +8,14 @@ function App() {
 
   // Lifting the state up
   const [activePlayer, setActivePlayer] = useState('X')
+  const [gameTurns, setGameTurns] = useState([]);
 
   function handleSelectSquare() {
     setActivePlayer((selectSquare) => selectSquare==='X'?'O':'X');
     console.log('holaaa', activePlayer);
+
+    setGameTurns();
+
   }
 
   return (
