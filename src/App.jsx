@@ -22,7 +22,8 @@ function App() {
   // Lifting the state up
   const [gameTurns, setGameTurns] = useState([]);
 
-  let gameBoard = initialGameBoard;
+  // Making the deep copy
+  let gameBoard = [...initialGameBoard.map((item) => [...item])];
   let winner;
 
   for (const turn of gameTurns) {
@@ -63,6 +64,10 @@ function App() {
 
   const isActiveTurn = deriveActivePlayer(gameTurns)
 
+  function handleRematch() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -70,7 +75,7 @@ function App() {
           <Player initialName='Player 1' symbol='X' isActive={isActiveTurn==='X'}></Player>
           <Player initialName='Player 2' symbol='O' isActive={isActiveTurn==='O'}></Player>
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner}></GameOver>}
+        {(winner || hasDraw) && <GameOver winner={winner} handleRematch={handleRematch}></GameOver>}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}></GameBoard>
       </div>
 
