@@ -4,22 +4,22 @@ import Player from "./components/Player"
 import GameBoard from "./components/GameBoard"
 import Logs from './components/Logs'
 
+// Create a Helper function
+function deriveActivePlayer(gameTurns) {
+  let isActiveTurn = 'X';
+  if(gameTurns.length > 0 && gameTurns[0].player === 'X') isActiveTurn = 'O';
+  return isActiveTurn;
+}
+
 function App() {  
 
   // Lifting the state up
-  const [activePlayer, setActivePlayer] = useState('X')
   const [gameTurns, setGameTurns] = useState([]);
 
   function handleSelectSquare(rowIndex, colIndex) {
-    setActivePlayer((selectSquare) => selectSquare==='X'?'O':'X');
-
     setGameTurns((prevTurns) => {
       
-      let currentPlayer = 'X';
-
-      if(prevTurns.length > 0 && prevTurns[0].player === 'X') {
-        currentPlayer = 'O';
-      }
+      const currentPlayer = deriveActivePlayer(prevTurns)
 
       const updatedTurns = [{
         square: {row: rowIndex, col: colIndex},
@@ -31,12 +31,14 @@ function App() {
 
   }
 
+  const isActiveTurn = deriveActivePlayer(gameTurns)
+
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player initialName='Player 1' symbol='X' isActive={activePlayer==='X'}></Player>
-          <Player initialName='Player 2' symbol='O' isActive={activePlayer==='O'}></Player>
+          <Player initialName='Player 1' symbol='X' isActive={isActiveTurn==='X'}></Player>
+          <Player initialName='Player 2' symbol='O' isActive={isActiveTurn==='O'}></Player>
         </ol>
 
         <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}></GameBoard>
