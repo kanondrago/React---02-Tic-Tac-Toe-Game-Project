@@ -21,6 +21,11 @@ function App() {
 
   // Lifting the state up
   const [gameTurns, setGameTurns] = useState([]);
+  //We add a new state for the players names
+  const [players, setPlayers] = useState({
+    X: 'Player 1',
+    O: 'Player 2',
+  })
 
   // Making the deep copy
   let gameBoard = [...initialGameBoard.map((item) => [...item])];
@@ -40,7 +45,7 @@ function App() {
     // Now we check if all of these are equal
     if(firstSquareSymbol && firstSquareSymbol === secondSquareSymbol) {
       if(firstSquareSymbol === ThirdSquareSymbol) {
-        winner = firstSquareSymbol;
+        winner = players[firstSquareSymbol];
       }
     }
   }
@@ -68,18 +73,27 @@ function App() {
     setGameTurns([]);
   }
 
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers(prevPlayers => {
+      return {
+        ...prevPlayers,
+        [symbol]:newName,
+      }
+    })
+  }
+
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player initialName='Player 1' symbol='X' isActive={isActiveTurn==='X'}></Player>
-          <Player initialName='Player 2' symbol='O' isActive={isActiveTurn==='O'}></Player>
+          <Player initialName='Player 1' symbol='X' isActive={isActiveTurn==='X'} onPlayerNamechange={handlePlayerNameChange}></Player>
+          <Player initialName='Player 2' symbol='O' isActive={isActiveTurn==='O'} onPlayerNamechange={handlePlayerNameChange}></Player>
         </ol>
         {(winner || hasDraw) && <GameOver winner={winner} handleRematch={handleRematch}></GameOver>}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}></GameBoard>
       </div>
 
-      <Logs gameTurns={gameTurns}></Logs>
+      <Logs gameTurns={gameTurns} players={players}></Logs>
     </main>
   )
 }
